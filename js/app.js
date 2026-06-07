@@ -1,3 +1,5 @@
+console.log("APP LOADED");
+alert("APP LOADED");
 function dmsToDecimal(dmsString){
 
     const parts = dmsString
