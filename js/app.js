@@ -100,6 +100,24 @@ function drawRoute(data, routeName, color){
         }
     ).addTo(map);
 
+points.forEach((point,index)=>{
+
+    L.circleMarker(
+        point,
+        {
+            radius:3,
+            color:color,
+            fillColor:color,
+            fillOpacity:1
+        }
+    )
+    .bindTooltip(
+        `${index+1}`
+    )
+    .addTo(map);
+
+});
+    
     route.bindTooltip(routeName);
 
     route.on("click", function(e){
