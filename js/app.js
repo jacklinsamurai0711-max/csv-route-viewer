@@ -1,3 +1,15 @@
+function dmsToDecimal(dmsString){
+
+    const parts = dmsString
+        .trim()
+        .split(":");
+
+    const deg = Number(parts[0]);
+    const min = Number(parts[1]);
+    const sec = Number(parts[2]);
+
+    return deg + min / 60 + sec / 3600;
+}
 const map = L.map('map').setView(
     [23.6978, 120.9605],
     7
