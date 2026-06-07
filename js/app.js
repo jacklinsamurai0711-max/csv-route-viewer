@@ -44,7 +44,7 @@ function loadCSVFiles(event){
     Array.from(files).forEach((file,index)=>{
 
         Papa.parse(file,{
-            header:true,
+            header:false,
             dynamicTyping:true,
 
             complete:function(result){
@@ -66,25 +66,23 @@ function drawRoute(data, routeName, color){
 
     const points = [];
 
-    data.forEach(row=>{
+    data.forEach(row => {
 
-        const lat =
-            row.latitude ??
-            row.lat;
-
-        const lon =
-            row.longitude ??
-            row.lon ??
-            row.lng;
-
-        if(lat && lon){
-
-            points.push([
-                Number(lat),
-                Number(lon)
-            ]);
-
+        if(row.length < 3){
+            return;
         }
+
+        const latDMS = row[1];
+        const lonDMS = row[2];
+
+        if(!latDMS || !lonDMS){
+            return;
+        }
+
+        const lat = dmsToDecimal(latDMS);
+        const lon = dmsToDecimal(lonDMS);
+
+        points.push([lat, lon]);
 
     });
 
@@ -95,12 +93,14 @@ function drawRoute(data, routeName, color){
     const route = L.polyline(
         points,
         {
-            color:color,
-            weight:5
+            color: color,
+            weight: 5
         }
     ).addTo(map);
 
-    route.on("click",function(e){
+    route.bindTooltip(routeName);
+
+    route.on("click", function(e){
 
         L.popup()
             .setLatLng(e.latlng)
@@ -109,12 +109,8 @@ function drawRoute(data, routeName, color){
 
     });
 
-    route.bindTooltip(routeName);
-
     const startPoint = points[0];
-
-    const endPoint =
-        points[points.length-1];
+    const endPoint = points[points.length - 1];
 
     L.circleMarker(
         startPoint,
@@ -125,9 +121,7 @@ function drawRoute(data, routeName, color){
             fillOpacity:1
         }
     )
-    .bindPopup(
-        `${routeName}<br><b>Start</b>`
-    )
+    .bindPopup(routeName + "<br>Start")
     .addTo(map);
 
     L.circleMarker(
@@ -139,9 +133,7 @@ function drawRoute(data, routeName, color){
             fillOpacity:1
         }
     )
-    .bindPopup(
-        `${routeName}<br><b>End</b>`
-    )
+    .bindPopup(routeName + "<br>End")
     .addTo(map);
 
     map.fitBounds(route.getBounds());
