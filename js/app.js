@@ -164,3 +164,54 @@ points.forEach((point,index)=>{
     map.fitBounds(route.getBounds());
 
 }
+let isRotating = false;
+let startX = 0;
+let startBearing = 0;
+
+map.getContainer().addEventListener(
+    "contextmenu",
+    e => e.preventDefault()
+);
+
+map.getContainer().addEventListener(
+    "mousedown",
+    function(e){
+
+        if(e.button === 2){
+
+            isRotating = true;
+
+            startX = e.clientX;
+
+            startBearing = map.getBearing();
+
+        }
+
+    }
+);
+
+document.addEventListener(
+    "mousemove",
+    function(e){
+
+        if(!isRotating){
+            return;
+        }
+
+        const dx = e.clientX - startX;
+
+        map.setBearing(
+            startBearing + dx * 0.5
+        );
+
+    }
+);
+
+document.addEventListener(
+    "mouseup",
+    function(){
+
+        isRotating = false;
+
+    }
+);
