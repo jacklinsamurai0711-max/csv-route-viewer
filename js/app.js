@@ -12,8 +12,13 @@ function dmsToDecimal(dmsString){
 
     return deg + min / 60 + sec / 3600;
 }
-const map = L.map('map').setView(
-    [23.6978, 120.9605],
+const map = L.map('map',{
+    rotate:true,
+    touchRotate:true,
+    bearing:0,
+    maxZoom:22
+}).setView(
+    [23.6978,120.9605],
     7
 );
 
