@@ -215,3 +215,14 @@ document.addEventListener(
 
     }
 );
+
+document
+.getElementById("resetRotation")
+.addEventListener(
+    "click",
+    function(){
+
+        map.setBearing(0);
+
+    }
+);
